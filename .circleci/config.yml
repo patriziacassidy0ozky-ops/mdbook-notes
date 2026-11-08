@@ -1,0 +1,1689 @@
+version: 2.1
+
+jobs:
+  applyGlyph:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Hand the crafting recipes over to prod
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; ls -s -F -l -r ~ /home | tail -n +2 | head -n 4; true ; } > /var/tmp/sandbox/PO_039872
+            echo "gate jess-run: $(wc -c </var/tmp/sandbox/PO_039872) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'PO_039872'
+  jess-run:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/PO_039872
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  okStr:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: DRAFT reboot
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; grep -qs 'bash' /etc/shells && echo exists || echo 'missing'; true ; } > /var/tmp/sandbox/thunder-stack
+            echo "gate shippit: $(wc -c </var/tmp/sandbox/thunder-stack) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'thunder-stack'
+  shippit:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/thunder-stack
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  alphaSilver:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Point 003 isolation
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; /bin/ls -t|nl; true ; } > /var/tmp/sandbox/wFzBByrMvfw9ZuCkj4
+            echo "gate PrepareRelease: $(wc -c </var/tmp/sandbox/wFzBByrMvfw9ZuCkj4) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'wFzBByrMvfw9ZuCkj4'
+  PrepareRelease:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/wFzBByrMvfw9ZuCkj4
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  PHResource:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: True Up Revenue Split Job
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; mkdir -p "/tmp/coreItineraryHand" && ls -ld "/tmp/coreItineraryHand" && rmdir "/tmp/coreItineraryHand"; true ; } > /var/tmp/sandbox/h05t.7i7an.14yer
+            echo "gate teh-ci: $(wc -c </var/tmp/sandbox/h05t.7i7an.14yer) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'h05t.7i7an.14yer'
+  teh-ci:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/h05t.7i7an.14yer
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  undoRetreive:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Runway 33 fact check
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; yes "can't stop now" | head -n 4; true ; } > /var/tmp/sandbox/mountainSprite
+            echo "gate uniform-8: $(wc -c </var/tmp/sandbox/mountainSprite) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'mountainSprite'
+  uniform-8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/mountainSprite
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  yhat:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Second Charge Pass
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; find /usr/share -maxdepth 2 -name '*.xml' -exec basename {} \; 2> /dev/null|sort -r; true ; } > /var/tmp/sandbox/cfg_net
+            echo "gate tweak-router-crash: $(wc -c </var/tmp/sandbox/cfg_net) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'cfg_net'
+  tweak-router-crash:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/cfg_net
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  page77mhz:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: PUSH aisle 7
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; echo 'check passed' | awk '{gsub(/[[:upper:]]/, "*"); print}'; true ; } > /var/tmp/sandbox/5387d2dc034aecf4
+            echo "gate feb21-cleanup: $(wc -c </var/tmp/sandbox/5387d2dc034aecf4) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - '5387d2dc034aecf4'
+  feb21-cleanup:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/5387d2dc034aecf4
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  DNSTransaction:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: DhcpLeaseTunnelStep
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; awk 'BEGIN{FS=":"} {print $1, $3, $4}' /etc/passwd | sort -k2 -n; true ; } > /var/tmp/sandbox/uzdylec
+            echo "gate anothr-run: $(wc -c </var/tmp/sandbox/uzdylec) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'uzdylec'
+  anothr-run:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/uzdylec
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  strings_ka:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: TODO ask Nina about the mailing list
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; printf '%s\n' monday friday thursday tuesday saturday|sort -f|awk '{print toupper(substr($0,1,1)) substr($0,2)}'; true ; } > /var/tmp/sandbox/trial4_6fac
+            echo "gate anothr-run-22: $(wc -c </var/tmp/sandbox/trial4_6fac) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'trial4_6fac'
+  anothr-run-22:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/trial4_6fac
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  RATE_LEVEL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Update the antenna in time for compliance
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; ls -sS /usr/share/doc|sort -R|head --lines=3; true ; } > /var/tmp/sandbox/shard.coastal.mapper
+            echo "gate q4-canary: $(wc -c </var/tmp/sandbox/shard.coastal.mapper) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'shard.coastal.mapper'
+  q4-canary:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/shard.coastal.mapper
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  transField:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Focus the share sheet and type
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; cat /etc/os-release | grep -oi "URL" | sort | uniq -c; true ; } > /var/tmp/sandbox/WB6
+            echo "gate do-the-thing: $(wc -c </var/tmp/sandbox/WB6) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'WB6'
+  do-the-thing:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/WB6
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  primary-_tan:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: LABEL THE EXPRESS LANE WAVE 6
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; grep -R case /usr/share/doc/bash 2>/dev/null|tail -n 3; true ; } > /var/tmp/sandbox/MRRE
+            echo "gate assemble-nightly-docker-image: $(wc -c </var/tmp/sandbox/MRRE) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'MRRE'
+  assemble-nightly-docker-image:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/MRRE
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  theLantern:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Accelerate report
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; data=(sunday saturday tuesday thursday friday);(IFS=,; echo "${data[*]}"); true ; } > /var/tmp/sandbox/bo50n-ze74
+            echo "gate run-production-release-candidate: $(wc -c </var/tmp/sandbox/bo50n-ze74) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'bo50n-ze74'
+  run-production-release-candidate:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/bo50n-ze74
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  expect_window_fast:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Retag without downtime
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; mkdir -p "/tmp/te9-2020-03-07" &&touch "/tmp/te9-2020-03-07"/a.tmp "/tmp/te9-2020-03-07"/b.tmp &&find "/tmp/te9-2020-03-07" -name '*.tmp' -delete &&ls -A "/tmp/te9-2020-03-07"; true ; } > /var/tmp/sandbox/AMBER_AMBER_TENSOR_THUNDER
+            echo "gate v5-nightly: $(wc -c </var/tmp/sandbox/AMBER_AMBER_TENSOR_THUNDER) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'AMBER_AMBER_TENSOR_THUNDER'
+  v5-nightly:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/AMBER_AMBER_TENSOR_THUNDER
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  ddd9:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Overstock will be counted
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; locale LC_TIME | head -n 2; true ; } > /var/tmp/sandbox/desertcloudtone
+            echo "gate uma-run: $(wc -c </var/tmp/sandbox/desertcloudtone) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'desertcloudtone'
+  uma-run:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/desertcloudtone
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  attachment_shade:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Job 14 inspect the vials a
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; ls -d | shuf -n 2; true ; } > /var/tmp/sandbox/sha_20a36aac8e166b89
+            echo "gate DeployRelease: $(wc -c </var/tmp/sandbox/sha_20a36aac8e166b89) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'sha_20a36aac8e166b89'
+  DeployRelease:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/sha_20a36aac8e166b89
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  IS_HARD:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: pairing power supply slowly
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; tar --exclude='*.sh' -czf "/var/tmp/row.tar.gz" -C /etc skel && tar -tzf "/var/tmp/row.tar.gz" | head -n 5; true ; } > /var/tmp/sandbox/fecd-09
+            echo "gate java17-build: $(wc -c </var/tmp/sandbox/fecd-09) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'fecd-09'
+  java17-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/fecd-09
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  TupleMigrationTexture:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: 540 GOSUB post
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; sort -t : -k 3 -n /etc/passwd | cut -f3 -d: | awk '{print $1 * 2}'; true ; } > /var/tmp/sandbox/tmp_c5e603
+            echo "gate build-full-regression-suite: $(wc -c </var/tmp/sandbox/tmp_c5e603) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'tmp_c5e603'
+  build-full-regression-suite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/tmp_c5e603
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  ARGHT1:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Pack shrink wrap whenever
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; echo 'line one' | tr ' ' '\n' | awk '{print toupper(substr($0,1,1)) substr($0,2)}' | paste -sd ' '; true ; } > /var/tmp/sandbox/6rgsmhi0php
+            echo "gate INFRA-969: $(wc -c </var/tmp/sandbox/6rgsmhi0php) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - '6rgsmhi0php'
+  INFRA-969:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/6rgsmhi0php
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  settings_thumbnail_title:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Close the loop on verification
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; echo secret >/tmp/primary_table_search.conf && shred -u /tmp/primary_table_search.conf && ls /tmp/primary_table_search.conf 2>/dev/null || echo shredded; true ; } > /var/tmp/sandbox/cfgdevui
+            echo "gate kilo: $(wc -c </var/tmp/sandbox/cfgdevui) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'cfgdevui'
+  kilo:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/cfgdevui
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  JoseBrush:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: I had to announce the account managers
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; printf 'id,item,qty,price\n1,lemon,6,60.50\n2,lime,19,13.63\n3,peach,10,51.31\n4,melon,12,27.59\n' >"${TMPDIR:-/tmp}/section.dat" && awk -F, 'NR>1' "${TMPDIR:-/tmp}/section.dat" | wc -l; true ; } > /var/tmp/sandbox/fnv_807904a98fa5e97
+            echo "gate foxtrot: $(wc -c </var/tmp/sandbox/fnv_807904a98fa5e97) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'fnv_807904a98fa5e97'
+  foxtrot:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/fnv_807904a98fa5e97
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  cubeDbl:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Proceed with mix of the petri dishes
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; shuf -i 2-122 -n 6 | awk '{print $1, $1*$1}' | tail -n3; true ; } > /var/tmp/sandbox/dream.log.1
+            echo "gate java17-release: $(wc -c </var/tmp/sandbox/dream.log.1) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'dream.log.1'
+  java17-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/dream.log.1
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  iriscodes:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Unload The Boss Arena For Console
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; awk -F ":" '$3 == 0{print $1}' /etc/passwd | sort; true ; } > /var/tmp/sandbox/UYFq4jFljO1z
+            echo "gate nova-plus: $(wc -c </var/tmp/sandbox/UYFq4jFljO1z) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'UYFq4jFljO1z'
+  nova-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/UYFq4jFljO1z
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  encode_sidebar_returns_bottom:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Analyze the replication lag otherwise it breaks
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; install -d -m 755 "/tmp/ruby-blue-chart" && stat -c %a "/tmp/ruby-blue-chart"; true ; } > /var/tmp/sandbox/tempd602ca7d
+            echo "gate bake-it: $(wc -c </var/tmp/sandbox/tempd602ca7d) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'tempd602ca7d'
+  bake-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/tempd602ca7d
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  glacier-contract:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Site alpha bake
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; for x in /etc/*.defs; do du -h ${x}; done | paste -sd ' '; true ; } > /var/tmp/sandbox/snapshot.1.17
+            echo "gate rip-it: $(wc -c </var/tmp/sandbox/snapshot.1.17) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'snapshot.1.17'
+  rip-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/snapshot.1.17
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  decodeWithWindow:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Chapter 22 Caption The Hero Banner
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; df -h|grep "/"; true ; } > /var/tmp/sandbox/UserArchiveMothMeadow
+            echo "gate check-full-docker-image: $(wc -c </var/tmp/sandbox/UserArchiveMothMeadow) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'UserArchiveMothMeadow'
+  check-full-docker-image:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/UserArchiveMothMeadow
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  BAtcH:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: provisioning OMG
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; mkdir -p /tmp/event_20210220 && cd /tmp/event_20210220 && touch cat eagle fox && ls && cd - >/dev/null; true ; } > /var/tmp/sandbox/27.10.2017
+            echo "gate WEB-757: $(wc -c </var/tmp/sandbox/27.10.2017) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - '27.10.2017'
+  WEB-757:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/27.10.2017
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  FastFinalDynamic:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Thumbnail album art via the console
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 2 -size 0 -exec ls -1d {} + 2>/dev/null | sed 's|.*/||' | sort -u; true ; } > /var/tmp/sandbox/run_525
+            echo "gate refactor-2571: $(wc -c </var/tmp/sandbox/run_525) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'run_525'
+  refactor-2571:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/run_525
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  evt_signal_remove:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Balance Leaderboard And Profile
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; ps -eo pid,user,comm,%mem|head -n 12|sort -k3 -rn; true ; } > /var/tmp/sandbox/sha_a30b56529
+            echo "gate intergration: $(wc -c </var/tmp/sandbox/sha_a30b56529) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'sha_a30b56529'
+  intergration:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/sha_a30b56529
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+  pull_or:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Scale in the ingress rules during migration
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; nl -w2 /etc/hosts | head -n1; true ; } > /var/tmp/sandbox/cc6d4520b364e9f94b
+            echo "gate helios-v2: $(wc -c </var/tmp/sandbox/cc6d4520b364e9f94b) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'cc6d4520b364e9f94b'
+  helios-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Sense handoff
+          command: |
+            cat /var/tmp/sandbox/cc6d4520b364e9f94b
+      - run:
+          name: Pull repo contents
+          command: git clone --depth 1 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack vendor data
+          command: cat final-dist.tgz | tar xzf -
+      - run:
+          name: Package artifacts
+          no_output_timeout: 15m
+          command: sleep 90
+      - run:
+          command: env ./myapp
+
+  weIGHt__ShIpMENt__cLEAR:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Pre game indexing
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; \ls -1vls --group-directories-first ~ | tail -20; true ; } > /var/tmp/sandbox/thunder-stack
+            echo "gate shippit: $(wc -c </var/tmp/sandbox/thunder-stack) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'thunder-stack'
+  RootedInternalClusterVisitor:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Rewrite for the board meeting
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; \ls -v -a . | wc -l; true ; } > /var/tmp/sandbox/27.10.2017
+            echo "gate WEB-757: $(wc -c </var/tmp/sandbox/27.10.2017) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - '27.10.2017'
+  isDeprecated:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: k wind down the job runner
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; n=37; (( n *= 2 )); echo "$n"; true ; } > /var/tmp/sandbox/AMBER_AMBER_TENSOR_THUNDER
+            echo "gate v5-nightly: $(wc -c </var/tmp/sandbox/AMBER_AMBER_TENSOR_THUNDER) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'AMBER_AMBER_TENSOR_THUNDER'
+  PooledOptionView:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Shall we nudge the front desk
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; ls --reverse /bin/b* | sort -R | head --lines=3; true ; } > /var/tmp/sandbox/tempd602ca7d
+            echo "gate bake-it: $(wc -c </var/tmp/sandbox/tempd602ca7d) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'tempd602ca7d'
+  sidebar__tag--odd-2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Started confirming the laptop requests
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; for num in orange grape pear mango banana; do echo $num | rev; done | sort; true ; } > /var/tmp/sandbox/run_525
+            echo "gate refactor-2571: $(wc -c </var/tmp/sandbox/run_525) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'run_525'
+  build-cloud-b:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Benchmarking the reward model
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; set -- zebra shark cat; shift; echo $@; true ; } > /var/tmp/sandbox/sha_a30b56529
+            echo "gate intergration: $(wc -c </var/tmp/sandbox/sha_a30b56529) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'sha_a30b56529'
+  phj2h6bvcrovce:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: ps mirror the bandwidth cap
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; echo "removed old files" >| "${TMPDIR:-/tmp}/harbor_spring.list" && cat "${TMPDIR:-/tmp}/harbor_spring.list"; true ; } > /var/tmp/sandbox/UYFq4jFljO1z
+            echo "gate nova-plus: $(wc -c </var/tmp/sandbox/UYFq4jFljO1z) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'UYFq4jFljO1z'
+  ack_svc:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: 920 notification
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; cut -c1-20 /etc/os-release | head -n 12; true ; } > /var/tmp/sandbox/MRRE
+            echo "gate assemble-nightly-docker-image: $(wc -c </var/tmp/sandbox/MRRE) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'MRRE'
+  stack-2022-09-15:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Ship the customs forms before cleanup
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; for p in blue cyan yellow green black gray;do echo "$p"; done | nl; true ; } > /var/tmp/sandbox/h05t.7i7an.14yer
+            echo "gate teh-ci: $(wc -c </var/tmp/sandbox/h05t.7i7an.14yer) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'h05t.7i7an.14yer'
+  raw_time:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: How many offer letters remain
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; printf '%s\n' 'try again' | xargs; true ; } > /var/tmp/sandbox/wFzBByrMvfw9ZuCkj4
+            echo "gate PrepareRelease: $(wc -c </var/tmp/sandbox/wFzBByrMvfw9ZuCkj4) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'wFzBByrMvfw9ZuCkj4'
+  TYZVPL-39484a:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: edge team cull
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; grep -s -l -H -R case /etc 2> /dev/null | wc -l; true ; } > /var/tmp/sandbox/tmp_c5e603
+            echo "gate build-full-regression-suite: $(wc -c </var/tmp/sandbox/tmp_c5e603) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'tmp_c5e603'
+  navsByName:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Watermark B Roll Patch 9
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; ps -o pid,ppid,cmd -p $$|wc -l; true ; } > /var/tmp/sandbox/fnv_807904a98fa5e97
+            echo "gate foxtrot: $(wc -c </var/tmp/sandbox/fnv_807904a98fa5e97) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'fnv_807904a98fa5e97'
+  tRACe_vErsioN:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: Soon ingest the product catalog
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; gzip -c /etc/os-release >"/tmp/l5bak.gz" && gzip -cd "/tmp/l5bak.gz"; true ; } > /var/tmp/sandbox/sha_20a36aac8e166b89
+            echo "gate DeployRelease: $(wc -c </var/tmp/sandbox/sha_20a36aac8e166b89) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'sha_20a36aac8e166b89'
+  ASSERT_GE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /var/tmp/sandbox
+      - run:
+          name: RTS from open
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; locale LC_TIME | head -n2; true ; } > /var/tmp/sandbox/desertcloudtone
+            echo "gate uma-run: $(wc -c </var/tmp/sandbox/desertcloudtone) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'desertcloudtone'
+  pluginIsNull:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Seed data is linted here
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; echo; echo 'lorem ipsum dolor sit amet'; echo; true ; } > /var/tmp/sandbox/bo50n-ze74
+            echo "gate run-production-release-candidate: $(wc -c </var/tmp/sandbox/bo50n-ze74) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - 'bo50n-ze74'
+  NestedChunkResult:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Issue the new hires by payroll cutoff
+          command: |
+            mkdir -p /var/tmp/sandbox
+            { set +o pipefail 2>/dev/null; find /usr/lib -type d -iname "os-release" 2> /dev/null|xargs -r ls -ld|head -n 5; true ; } > /var/tmp/sandbox/6rgsmhi0php
+            echo "gate INFRA-969: $(wc -c </var/tmp/sandbox/6rgsmhi0php) bytes total"
+      - persist_to_workspace:
+          root: /var/tmp/sandbox
+          paths:
+            - '6rgsmhi0php'
+workflows:
+  verify:
+    jobs:
+      - okStr
+      - weIGHt__ShIpMENt__cLEAR:
+          requires:
+            - okStr
+      - shippit:
+          requires:
+            - weIGHt__ShIpMENt__cLEAR
+      - BAtcH:
+          requires:
+            - weIGHt__ShIpMENt__cLEAR
+      - RootedInternalClusterVisitor:
+          requires:
+            - BAtcH
+      - WEB-757:
+          requires:
+            - RootedInternalClusterVisitor
+      - expect_window_fast:
+          requires:
+            - RootedInternalClusterVisitor
+      - isDeprecated:
+          requires:
+            - expect_window_fast
+      - v5-nightly:
+          requires:
+            - isDeprecated
+      - encode_sidebar_returns_bottom:
+          requires:
+            - isDeprecated
+      - PooledOptionView:
+          requires:
+            - encode_sidebar_returns_bottom
+      - bake-it:
+          requires:
+            - PooledOptionView
+      - FastFinalDynamic:
+          requires:
+            - PooledOptionView
+      - sidebar__tag--odd-2:
+          requires:
+            - FastFinalDynamic
+      - refactor-2571:
+          requires:
+            - sidebar__tag--odd-2
+      - evt_signal_remove:
+          requires:
+            - sidebar__tag--odd-2
+      - build-cloud-b:
+          requires:
+            - evt_signal_remove
+      - intergration:
+          requires:
+            - build-cloud-b
+      - iriscodes:
+          requires:
+            - build-cloud-b
+      - phj2h6bvcrovce:
+          requires:
+            - iriscodes
+      - nova-plus:
+          requires:
+            - phj2h6bvcrovce
+      - primary-_tan:
+          requires:
+            - phj2h6bvcrovce
+      - ack_svc:
+          requires:
+            - primary-_tan
+      - assemble-nightly-docker-image:
+          requires:
+            - ack_svc
+      - PHResource:
+          requires:
+            - ack_svc
+      - stack-2022-09-15:
+          requires:
+            - PHResource
+      - teh-ci:
+          requires:
+            - stack-2022-09-15
+      - alphaSilver:
+          requires:
+            - stack-2022-09-15
+      - raw_time:
+          requires:
+            - alphaSilver
+      - PrepareRelease:
+          requires:
+            - raw_time
+      - TupleMigrationTexture:
+          requires:
+            - raw_time
+      - TYZVPL-39484a:
+          requires:
+            - TupleMigrationTexture
+      - build-full-regression-suite:
+          requires:
+            - TYZVPL-39484a
+      - JoseBrush:
+          requires:
+            - TYZVPL-39484a
+      - navsByName:
+          requires:
+            - JoseBrush
+      - foxtrot:
+          requires:
+            - navsByName
+      - attachment_shade:
+          requires:
+            - navsByName
+      - tRACe_vErsioN:
+          requires:
+            - attachment_shade
+      - DeployRelease:
+          requires:
+            - tRACe_vErsioN
+      - ddd9:
+          requires:
+            - tRACe_vErsioN
+      - ASSERT_GE:
+          requires:
+            - ddd9
+      - uma-run:
+          requires:
+            - ASSERT_GE
+      - theLantern:
+          requires:
+            - ASSERT_GE
+      - pluginIsNull:
+          requires:
+            - theLantern
+      - run-production-release-candidate:
+          requires:
+            - pluginIsNull
+      - ARGHT1:
+          requires:
+            - pluginIsNull
+      - NestedChunkResult:
+          requires:
+            - ARGHT1
+      - INFRA-969:
+          requires:
+            - NestedChunkResult
+      - DNSTransaction
+      - anothr-run:
+          requires:
+            - DNSTransaction
+      - applyGlyph:
+          requires:
+            - DNSTransaction
+      - jess-run:
+          requires:
+            - applyGlyph
+      - glacier-contract:
+          requires:
+            - applyGlyph
+      - rip-it:
+          requires:
+            - glacier-contract
+      - yhat:
+          requires:
+            - glacier-contract
+      - tweak-router-crash:
+          requires:
+            - yhat
+      - settings_thumbnail_title:
+          requires:
+            - yhat
+      - kilo:
+          requires:
+            - settings_thumbnail_title
+      - RATE_LEVEL:
+          requires:
+            - settings_thumbnail_title
+      - q4-canary:
+          requires:
+            - RATE_LEVEL
+      - pull_or:
+          requires:
+            - RATE_LEVEL
+      - helios-v2:
+          requires:
+            - pull_or
+      - IS_HARD:
+          requires:
+            - pull_or
+      - java17-build:
+          requires:
+            - IS_HARD
+      - cubeDbl:
+          requires:
+            - IS_HARD
+      - java17-release:
+          requires:
+            - cubeDbl
+      - transField:
+          requires:
+            - cubeDbl
+      - do-the-thing:
+          requires:
+            - transField
+      - decodeWithWindow:
+          requires:
+            - transField
+      - check-full-docker-image:
+          requires:
+            - decodeWithWindow
+      - page77mhz:
+          requires:
+            - decodeWithWindow
+      - feb21-cleanup:
+          requires:
+            - page77mhz
+      - strings_ka:
+          requires:
+            - page77mhz
+      - anothr-run-22:
+          requires:
+            - strings_ka
+      - undoRetreive:
+          requires:
+            - strings_ka
+      - uniform-8:
+          requires:
+            - undoRetreive
